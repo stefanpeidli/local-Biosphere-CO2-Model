@@ -140,29 +140,31 @@ other_data = np.matrix('0 0 0 0 1 -171996 -174.2 92025 8.9;\
                        0 0 3 2 2 -3 0 0 0;\
                        2 -1 0 2 2 -3 0 0 0')
 
+
 def LnBnR(data, JME):
     nrow = np.shape(data)[0]
     Ln = 0
     for i in range(0, nrow):
         Ln = Ln + data[i,0] * np.cos(data[i,1] + data[i,2] * JME)
     return(Ln)        
-    
-def SPA(): 
-    Month = int(input('Enter the month(Note: if month<3, then month = month + 12, year = year - 1): '))
-    Year = int(input('Enter the year (e.g. 2003): '))
-    Day = int(input('Enter the day of the month: '))
-    hour = int(input('Enter the local time hour: '))
-    minute = int(input('Enter the minute: '))
-    second = int(input('Enter the second: '))
-    TZ = int(input('Enter the time zone: '))
-    DT = float(input('Enter the time difference between the Earth rotation time and Terrestrial Time: '))
-    lat = float(input('Enter the latitude in degrees: '))
-    long = float(input('Enter the longitude in degrees: '))
-    P = float(input('Enter the pressure in mbar: '))
-    T = float(input('Enter the temperature in °C: '))
-    elev = float(input('Enter the elevation in m: '))
-    slope = float(input('Enter the surface slope in °: '))
-    ra = float(input('Enter the surface Azimuth rotation in °: '))
+
+
+def SPA(Day,Month,Year,hour,TZ,lat,long,elev):
+    # Month = int(input('Enter the month(Note: if month<3, then month = month + 12, year = year - 1): '))
+    # Year = int(input('Enter the year (e.g. 2003): '))
+    # Day = int(input('Enter the day of the month: '))
+    # hour = int(input('Enter the local time hour: '))
+    minute = 0  # int(input('Enter the minute: '))
+    second = 0  # int(input('Enter the second: '))
+    # TZ = int(input('Enter the time zone: '))
+    DT = 0  # float(input('Enter the time difference between the Earth rotation time and Terrestrial Time: '))
+    # lat = float(input('Enter the latitude in degrees: '))
+    # long = float(input('Enter the longitude in degrees: '))
+    P = 700  # float(input('Enter the pressure in mbar: '))
+    T = 12 # float(input('Enter the temperature in °C: '))
+    # elev = float(input('Enter the elevation in m: '))
+    slope = 0  # float(input('Enter the surface slope in °: '))
+    ra = 0  # float(input('Enter the surface Azimuth rotation in °: '))
     D = Day + ((hour-TZ)/24) + (minute/(24*60)) + (second/(24*3600)) # the "decimal" version of day
     A = (Year/100)//1
     B = 2 - A + (A/4)//1 
@@ -224,4 +226,12 @@ def SPA():
     Gamma = (Gamma*180/np.pi) % 360
     Phi = (Gamma + 180) % 360
     I = np.arccos(np.cos(theta*np.pi/180)*np.cos(slope*np.pi/180)+np.sin(slope*np.pi/180)*np.sin(theta*np.pi/180)*np.cos((Gamma-ra)*np.pi/180))*180/np.pi
-    print("The angle of incidence is " + str(I) + "°")
+    # print("The angle of incidence is " + str(I) + "°")
+    return I
+
+
+def SPA_day(Day,Month,Year,TZ,lat,long,elev):
+    I = np.zeros(24)
+    for i in range(24):
+        I[i] = SPA(Day,Month,Year,i,TZ,lat,long,elev)
+    return I

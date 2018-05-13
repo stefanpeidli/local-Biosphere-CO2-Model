@@ -51,6 +51,7 @@ for i in range(len(raw_sun_times)):
     else:
         full_hours.append(False)
 clean_sun_pos = sun_arc[full_hours]
+print(clean_sun_pos)
 clean_sun_times = raw_sun_times[full_hours]
 intensity = np.arctan(1/clean_sun_pos)
 
