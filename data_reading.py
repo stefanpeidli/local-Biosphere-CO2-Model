@@ -55,8 +55,9 @@ print(clean_sun_pos)
 clean_sun_times = raw_sun_times[full_hours]
 intensity = np.arctan(1/clean_sun_pos)
 
+plt.plot(clean_sun_times, clean_sun_pos)
 #plt.plot(clean_sun_times, intensity)
-#plt.show()
+plt.show()
 print(intensity)
 print(clean_sun_times_hours)
 

@@ -149,7 +149,7 @@ def LnBnR(data, JME):
     return(Ln)        
 
 
-def SPA(Day,Month,Year,hour,TZ,lat,long,elev):
+def SPA(Day, Month, Year, hour, TZ, lat, long, elev):
     # Month = int(input('Enter the month(Note: if month<3, then month = month + 12, year = year - 1): '))
     # Year = int(input('Enter the year (e.g. 2003): '))
     # Day = int(input('Enter the day of the month: '))
@@ -157,7 +157,7 @@ def SPA(Day,Month,Year,hour,TZ,lat,long,elev):
     minute = 0  # int(input('Enter the minute: '))
     second = 0  # int(input('Enter the second: '))
     # TZ = int(input('Enter the time zone: '))
-    DT = 0  # float(input('Enter the time difference between the Earth rotation time and Terrestrial Time: '))
+    DT = -20 + 32 * ((Year-1820)/100)**2  # float(input('Enter the time difference between the Earth rotation time and Terrestrial Time: ')) # extrapolated in seconds
     # lat = float(input('Enter the latitude in degrees: '))
     # long = float(input('Enter the longitude in degrees: '))
     P = 700  # float(input('Enter the pressure in mbar: '))
@@ -169,10 +169,10 @@ def SPA(Day,Month,Year,hour,TZ,lat,long,elev):
     A = (Year/100)//1
     B = 2 - A + (A/4)//1 
     JD = (365.25*(Year+4716))//1 + 30.6001*(Month+1)//1 + D + B - 1524.5 # computation of Julian Day
-    JDE = JD + DT/86400  #Computation of Julian Ephemeris Day
+    JDE = JD + DT/86400  # Computation of Julian Ephemeris Day
     JC = (JD - 2451545)/36525 # computation of Julian Century
     JCE = (JDE - 2451545)/36525
-    JME = JCE/10 #Computation of Julian Millenium
+    JME = JCE/10 # Computation of Julian Millenium
     L = (LnBnR(L0_data, JME) + LnBnR(L1_data, JME)*JME + LnBnR(L2_data, JME)*pow(JME, 2) + LnBnR(L3_data, JME)*pow(JME, 3) + \
     LnBnR(L4_data, JME)*pow(JME, 4) + LnBnR(L5_data, JME)*pow(JME, 5))/1e8
     L = (L*180/np.pi) % 360
