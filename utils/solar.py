@@ -235,3 +235,12 @@ def SPA_day(Day,Month,Year,TZ,lat,long,elev):
     for i in range(24):
         I[i] = SPA(Day,Month,Year,i,TZ,lat,long,elev)
     return I
+
+
+# Computes solar intensity
+def solar_intensity(Day=20, Month=5, Year=2018, hour=0, TZ=2, lat=47, long=10, elev=3000):
+    incident_angle = SPA(Day, Month, Year, hour, TZ, lat, long, elev)
+    if incident_angle <= 90:
+        return abs(incident_angle - 90) / 90
+    else:
+        return 0

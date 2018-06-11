@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import solar as sol
+from utils import solar as sol
 
 
 # Photosynthesis rate at intensity, Michaelis-Menden-like
@@ -14,18 +14,10 @@ def pi_curve(intensity, p_max=10, ki=1/2):
 def tomato(intensity, temperature, cotwo, a, b, c, d):
     # a is constant factor
     # b, c, d half saturation for intensity, temperature, cotwo
-    return a* intensity * temperature * cotwo/((b+intensity)*(c+ temperature)*(d+ cotwo))
+    return a * intensity * temperature * cotwo/((b+intensity)*(c + temperature)*(d + cotwo))
 
 def nelken(intensity, temperature, cotwo, a, b, c, d):
-    return a* intensity**b * temperature**c * cotwo**d
-
-# Computes solar intensity
-def solar_intensity(Day=20, Month=5, Year=2018, hour=0, TZ=2, lat=47, long=10, elev=3000):
-    incident_angle = sol.SPA(Day, Month, Year, hour, TZ, lat, long, elev)
-    if incident_angle <= 90:
-        return abs(incident_angle - 90) / 90
-    else:
-        return 0
+    return a * intensity**b * temperature**c * cotwo**d
 
 
 # The model
@@ -49,14 +41,14 @@ def evolve(init_concentration, init_time=0, init_date=(6,6,2018), duration=24, s
         net_change = absorp + emiss
         new_value = C[-1] + net_change * stepsize  # eulerian method
         C.append(new_value)
-    return [time,C]
+    return [time, C]
 
 
 def absorption(ID, cur_hour):
     if ID == 0:  # PI-Curve / Michaelis-Menten-Model
         p_max = 1
         ki = 1 / 16
-        return -pi_curve(solar_intensity(hour=cur_hour), p_max, ki)
+        return -pi_curve(sol.solar_intensity(hour=cur_hour), p_max, ki)
     elif ID == 1:  # Tomato
         return
     elif ID == 2:  # Nelke
@@ -84,5 +76,3 @@ res = evolve(406, 0, (6, 6, 2018), 23, stepsize, 0, 0)
 #plt.plot(np.arange(0, 24, stepsize), Day2)
 plt.plot(res[0], res[1])
 plt.show()
-
-
