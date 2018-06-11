@@ -11,10 +11,12 @@ def pi_curve(intensity, p_max=10, ki=1/2):
     # ki        half-saturation intensity
     return p_max * intensity / (ki + intensity)
 
+
 def tomato(intensity, temperature, cotwo, a, b, c, d):
     # a is constant factor
     # b, c, d half saturation for intensity, temperature, cotwo
     return a * intensity * temperature * cotwo/((b+intensity)*(c + temperature)*(d + cotwo))
+
 
 def nelken(intensity, temperature, cotwo, a, b, c, d):
     return a * intensity**b * temperature**c * cotwo**d
@@ -36,7 +38,7 @@ def evolve(init_concentration, init_time=0, init_date=(6,6,2018), duration=24, s
     time = np.arange(init_time, init_time + duration, stepsize) % 24
     for t in time[1:]:
         cur_hour = round(t)
-        absorp = absorption(0, cur_hour, p, k)
+        absorp = absorption(0, cur_hour, p=p, k=k)
         emiss = emission(0, c_e)
         net_change = absorp + emiss
         new_value = C[-1] + net_change * stepsize  # eulerian method
@@ -46,8 +48,6 @@ def evolve(init_concentration, init_time=0, init_date=(6,6,2018), duration=24, s
 
 def absorption(ID, cur_hour, p=1, k=1/16):
     if ID == 0:  # PI-Curve / Michaelis-Menten-Model
-        #p_max = 1
-        #k = 1 / 16
         return -pi_curve(sol.solar_intensity(hour=cur_hour), p, k)
     elif ID == 1:  # Tomato
         return
