@@ -11,6 +11,13 @@ def pi_curve(intensity, p_max=10, ki=1/2):
     # ki        half-saturation intensity
     return p_max * intensity / (ki + intensity)
 
+def tomato(intensity, temperature, cotwo, a, b, c, d):
+    # a is constant factor
+    # b, c, d half saturation for intensity, temperature, cotwo
+    return a* intensity * temperature * cotwo/((b+intensity)*(c+ temperature)*(d+ cotwo))
+
+def nelken(intensity, temperature, cotwo, a, b, c, d):
+    return a* intensity**b * temperature**c * cotwo**d
 
 # Computes solar intensity
 def solar_intensity(Day=20, Month=5, Year=2018, hour=0, TZ=2, lat=47, long=10, elev=3000):
