@@ -2,7 +2,7 @@ import numpy as np
 import model
 import matplotlib.pyplot as plt
 
-# bla
+# defining a time-series piece
 n = 23
 
 # initial parameter values
@@ -13,10 +13,10 @@ c_e = 0.5
 # Gradient descent parameters
 gd_stepsize = 0.05  # gradient descent step size
 
+# Load Measurement series (e.g. '2016_06_02_co2.csv')
+data = np.genfromtxt('data/2016_06_02_co2.csv', delimiter=',', names=True)
+B = data['CO2']
 
-# Measurement series
-B = np.genfromtxt('data/2016_06_02_co2.csv', delimiter=',', names=True)
-B = B['CO2']
 
 iters = 20
 losses = []
@@ -24,8 +24,8 @@ for j in range(iters):
 
     # Prediction series produced with current parameter values
     stepsize = 0.1  # Model integration stepsize
-    [times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, c_e, 0, 0)
-    A = np.interp(np.arange(n), times, A)  # interpolate to match measurement times
+    [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, c_e, 0, 0)
+    A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
     if j == 0:
         C = A  # save for plot
     # Compute losses (for visualizations and testing purposes)
