@@ -24,7 +24,7 @@ def nelken(intensity, temperature, cotwo, a, b, c, d):
 
 # The model
 
-def evolve(init_concentration, init_time=0, init_date=(6,6,2018), duration=24, stepsize=0.1, p=10, k=1, c_e=0.5, Absorption=0, Emission=0):
+def evolve(init_concentration, init_time=0, init_date=(6,6,2018), duration=24, stepsize=0.1, p=10, k=1, c_e=0.5, ce1=1, ce2=1, Absorption=0, Emission=0):
     # EVOLVE : evolves an initial concentration in time.
     # init_concentration: initial concentration at init_time at the measurement site
     # init_time: Time in hours on the clock when evolving starts (0 means 0:00 in the morning)
@@ -55,7 +55,7 @@ def absorption(ID, cur_hour, p=1, k=1/16):
         return
 
 
-def emission(ID, c_e=0.5, temperature=25):
+def emission(ID, c_e=0.5, temperature=10):
     if ID == 0:  # Constant model
         constant = c_e
         return constant

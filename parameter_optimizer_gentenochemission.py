@@ -2,13 +2,18 @@ import numpy as np
 import model
 import matplotlib.pyplot as plt
 
+
+# Gent Enoch Emission model kind of fails I guess
+
 # defining a time-series piece
 n = 24
 
 # initial parameter values
 p = 10
 k = 1
-c_e = 0.5
+c_e = 0.5   # Basic Emission model
+ce1 = 1    # Gent Enoch Emission model coeff 1
+ce2 = 1    # Gent Enoch Emission model coeff 2
 
 # Gradient descent parameters
 gd_stepsize = 0.05  # gradient descent step size
@@ -34,7 +39,7 @@ for j in range(iters):
         B = Bs[day]
         # Prediction series produced with current parameter values
         stepsize = 0.1  # Model integration stepsize
-        [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, c_e, 0, 0)
+        [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, ce1=ce1, ce2=ce2, Absorption=0, Emission=1)
         A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
         As[day] = A
 
@@ -47,20 +52,20 @@ for j in range(iters):
         I = np.arange(n)  # Intensities for the series
 
         # Compute gradient of prediction
-        gradA = np.zeros((n+1, 3))
+        gradA = np.zeros((n+1, 4))
         for i in range(n):
-            gradf = np.array([-I[i] / (k + I[i]), p * I[i] / (k + I[i]) ** 2, 1])  # format: [dp, dk, dc_e]
+            gradf = np.array([-I[i] / (k + I[i]), p * I[i] / (k + I[i]) ** 2, np.exp(ce2*(10-25)), ce1*ce2*(10-25)*np.exp(ce2*(10-25))])  # format: [dp, dk, dce1, dce2]
             gradA[i+1] = gradA[i] + stepsize * gradf
 
         # Compute gradient on error surface
-        gradL = [0, 0, 0]
+        gradL = [0, 0, 0, 0]
         for i in range(n):
             gradL = gradL + 2 * (A[i]-B[i]) * gradA[i]
         gradL = gradL / n
 
         # Make gradient step
-        [p, k, c_e] = [p, k, c_e] - gd_stepsize * gradL
-        print('New parameters: p = ' + str(p) + ' , k = ' + str(k) + ' , c_e = ' + str(c_e))
+        [p, k, ce1, ce2] = [p, k, ce1, ce2] - gd_stepsize * gradL
+        print('New parameters: p = ' + str(p) + ' , k = ' + str(k) + ' , ce1 = ' + str(ce1) + ' , ce2 = ' + str(ce2))
     losses.append(loss / day_count)
     print('Loss in iteration ' + str(j) + " : " + str(losses[j]))
 
