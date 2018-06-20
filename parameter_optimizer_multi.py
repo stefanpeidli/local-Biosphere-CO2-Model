@@ -13,6 +13,9 @@ c_e = 0.5
 # Gradient descent parameters
 gd_stepsize = 0.05  # gradient descent step size
 
+# measurement grid size in hours:
+h_measure = 1
+
 # Load Measurement series (e.g. '2016_06_02_co2.csv')
 data = np.genfromtxt('data/data_small_ordered.csv', delimiter=',', names=True)
 # print(data)
@@ -33,9 +36,14 @@ for j in range(iters):
     for day in range(len(Bs)):
         B = Bs[day]
         # Prediction series produced with current parameter values
-        stepsize = 0.1  # Model integration stepsize
+        stepsize = 0.1  # Model integration stepsize in hours
+        duration = 24  # Duration of the measurement
         [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, c_e, 0, 0)
-        A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
+        # A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
+        # Matching downsampling:
+        K = np.array(np.arange(0, duration / h_measure) * h_measure / stepsize, dtype=np.int)
+        A = np.array(A)
+        A = A[K]
         As[day] = A
 
         if j == 0:

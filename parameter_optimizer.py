@@ -17,15 +17,24 @@ gd_stepsize = 0.05  # gradient descent step size
 data = np.genfromtxt('data/2016_06_02_co2.csv', delimiter=',', names=True)
 B = data['CO2']
 
+# measurement grid size in hours:
+h_measure = 1
+
 
 iters = 20
 losses = []
 for j in range(iters):
 
     # Prediction series produced with current parameter values
-    stepsize = 0.1  # Model integration stepsize
-    [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), 24, stepsize, p, k, c_e, 0, 0)
-    A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
+    stepsize = 0.1  # Model integration stepsize in hours
+    duration = 24  # Duration of the measurement
+    [model_times, A] = model.evolve(B[0], 0, (2, 6, 2016), duration, stepsize, p, k, c_e, 0, 0)
+    # A = np.interp(np.arange(n), model_times, A)  # interpolate to match measurement times
+    # Matching downsampling:
+    K = np.array(np.arange(0, duration / h_measure-1) * h_measure / stepsize, dtype=np.int)
+    A = np.array(A)
+    A = A[K]
+
     if j == 0:
         C = A  # save for plot
     # Compute losses (for visualizations and testing purposes)
