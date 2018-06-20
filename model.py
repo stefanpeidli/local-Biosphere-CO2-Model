@@ -65,14 +65,15 @@ def emission(ID, c_e=0.5, temperature=10):
         return c1*np.exp(c2 * (temperature - 25))
 
 
-# Apply
-#stepsize = 0.1
-#Day1 = model_day(stepsize)
-#Day2 = model_day(stepsize, init_val=Day1[-1])
-#res = evolve(406, 0, (6, 6, 2018), 23, stepsize, 0, 0)
+# Simulations
+if __name__ == "__main__":
+    stepsize = 0.1
+    #Day1 = model_day(stepsize)
+    #Day2 = model_day(stepsize, init_val=Day1[-1])
+    res = evolve(406, 0, (6, 6, 2018), 23, stepsize, p=10, k=1)
 
-# Plot
-#plt.plot(np.arange(0, 24, stepsize), Day1)
-#plt.plot(np.arange(0, 24, stepsize), Day2)
-#plt.plot(res[0], res[1])
-#plt.show()
+    # Plot
+    #plt.plot(np.arange(0, 24, stepsize), Day1)
+    #plt.plot(np.arange(0, 24, stepsize), Day2)
+    plt.plot(res[0], res[1])
+    plt.show()

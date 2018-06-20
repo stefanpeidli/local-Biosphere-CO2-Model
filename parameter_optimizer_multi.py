@@ -24,7 +24,7 @@ for i in range(len(Bs)):
 Bs = np.reshape(Bs, newshape=(day_count, 24))
 
 
-iters = 20
+iters = 5
 losses = []
 As = np.zeros(shape=Bs.shape)
 Cs = np.zeros(shape=Bs.shape)
@@ -77,18 +77,33 @@ plt.plot(np.arange(len(Bs[0])), Bs[0])
 plt.plot(np.arange(len(Cs[0])), Cs[0])
 plt.xlabel('Time (hours)')
 plt.ylabel('CO2 - Concentration')
-plt.title('Total Loss by epoch')
+plt.title('Results for single Day')
 plt.legend(['Prediction final', 'Measurement', 'Prediction initial'])
 plt.show()
 
+"""
 plt.plot(np.arange(day_count * n), np.reshape(As, day_count * n))
 plt.plot(np.arange(day_count * n), np.reshape(Bs, day_count * n))
 plt.plot(np.arange(day_count * n), np.reshape(Cs, day_count * n))
 plt.xlabel('Time (hours)')
 plt.ylabel('CO2 - Concentration')
-plt.title('Total Loss by epoch')
+plt.title('Parameter Optimization')
 plt.legend(['Prediction final', 'Measurement', 'Prediction initial'])
 for day in range(day_count-1):
     plt.axvline((day+1) * n, linestyle='--', c='r', alpha=0.6)
     plt.text(day * n + n/2, 470, 'day ' + str(day), horizontalalignment='center')
+plt.show()
+"""
+ka = 1
+for i in [2,8,9,10,12,13]:
+    plt.subplot(2,3,ka)
+    plt.plot(np.arange(n), np.reshape(As[i], n))
+    plt.plot(np.arange(n), np.reshape(Bs[i], n))
+    plt.plot(np.arange(n), np.reshape(Cs[i], n))
+    plt.xlabel('Time (hours)')
+    plt.ylabel('CO2 - Concentration')
+    plt.suptitle('Parameter Optimization', fontsize=16)
+    plt.legend(['Prediction final', 'Measurement', 'Prediction initial'])
+    plt.text(24/2, 470, 'day ' + str(i+1), horizontalalignment='center')
+    ka = ka + 1
 plt.show()
