@@ -1,4 +1,6 @@
 # A very simple and basic model for local CO2 concentration
+# Author: Stefan Peidli (stefanpeidli@gmail.com)
+# https://github.com/stefanpeidli/local-Biosphere-CO2-Model
 
 import numpy as np
 import matplotlib.pyplot as plt

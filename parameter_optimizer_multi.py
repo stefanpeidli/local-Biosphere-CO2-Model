@@ -1,3 +1,7 @@
+# GDM on Time Series Prediction for Parameter Optimization
+# Author: Stefan Peidli (stefanpeidli@gmail.com)
+# https://github.com/stefanpeidli/local-Biosphere-CO2-Model
+
 import numpy as np
 import model
 import matplotlib.pyplot as plt
@@ -115,3 +119,7 @@ for i in [2,8,9,10,12,13]:
     plt.text(24/2, 470, 'day ' + str(i+1), horizontalalignment='center')
     ka = ka + 1
 plt.show()
+
+np.savetxt("predictions_initial.csv", As, delimiter=",")
+np.savetxt("predictions_final.csv", Cs, delimiter=",")
+np.savetxt("measurements.csv", Bs, delimiter=",")
